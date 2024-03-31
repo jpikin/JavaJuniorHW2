@@ -29,6 +29,8 @@ public class App {
         getInfo(animals.get(1));
         getInfo(animals.get(2));
         getSound(animals.get(0));
+        getSound(animals.get(1));
+        getSound(animals.get(2));
     }
 
     public static void getInfo(Object obj) {
