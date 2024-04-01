@@ -124,12 +124,28 @@ public class QueryBuilder {
 
     }
 
-    /**
-     * TODO: Доработать метод в рамках домашней работы
-     *
-     * @return
-     */
-    public String buildDeleteQuery() {
+    public String buildDeleteQuery(Object obj, UUID primaryKey) {
+        Class<?> clazz = obj.getClass();
+        if (clazz.isAnnotationPresent(Table.class)){
+            StringBuilder query = new StringBuilder("DELETE FROM ");
+            Table tableAnnotation = clazz.getAnnotation(Table.class);
+
+            query
+                    .append(tableAnnotation.name())
+                    .append(" WHERE ");
+
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                if (field.isAnnotationPresent(Column.class)) {
+                    Column columnAnnotation = field.getAnnotation(Column.class);
+                    if (columnAnnotation.primaryKey()) {
+                        query.append(columnAnnotation.name()).append(" = '").append(primaryKey).append("'");
+                        break;
+                    }
+                }
+            }
+            return query.toString();
+        }
         return "";
     }
 
